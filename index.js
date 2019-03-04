@@ -92,6 +92,8 @@ class mainScene extends Phaser.Scene{
       timer(this);
       setTimeout(function() { console.log(window.timeScore); }, 5000);
 
+      game.input.mouse.capture = true;
+
       this.fieldArray = [];
       this.fieldGroup = this.add.group();
       for (var i = 0; i < 4; i++)
@@ -99,18 +101,21 @@ class mainScene extends Phaser.Scene{
         this.fieldArray[i] = [];
         for (var j = 0; j < 4; j++)
         {
-          var cell = this.add.sprite(150 + i*120, 150 + j*120, "tile").setInteractive();
-          cell.on('clicked', function () { console.log('clicked'); }, this);
-          cell.emit('clicked');
+          var cell = this.add.sprite(150 + i*120, 150 + j*120, "tile");
           this.fieldGroup.add(cell);
           this.fieldArray[i][j] = {
             tileValue: 1,
             tileSprite: cell,
             canUpgrade: true
         }
+        this.fieldArray[i][j].tileSprite.setInteractive();
+        this.fieldArray[i][j].tileSprite.on('clicked', function (tileSprite) { tileSprite.input.enabled = false; console.log(tileSprite); tileSprite.setVisible(false); }, this);
       }
     }
-
+    this.input.on('gameobjectup', function (pointer, gameObject)
+    {
+      gameObject.emit('clicked', gameObject);
+    }, this);
     console.log(this.fieldArray[0][0]);
   }
 
