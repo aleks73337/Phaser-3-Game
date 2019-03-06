@@ -61,12 +61,70 @@ function timer(scene)
   }
 }
 
-var level;
-var layer = [];
+var level = [[3,0,0,4,0],
+             [0,0,0,0,4],
+             [0,0,0,4,0],
+             [0,0,4,0,4],
+             [2,0,0,0,0]];
 
-function clickHandler(sprite)
+var empty_cells = 25;
+var pointerdown = false;
+var from_x, from_y, to_x, to_y;
+
+function div(val, by){
+    return (val - val % by) / by;
+}
+
+function find_coords()
 {
-  console.log('clicked');
+  from_x_div = div(from_x, 100)
+  from_y_div = div(from_y, 100)
+  to_x_div = div(to_x, 100)
+  to_y_div = div(to_y, 100)
+  mas_x_cells = [];
+  var index = 0;
+  for (var i = from_x_div; i <= to_x_div; i++)
+    {
+      mas_x_cells[index] = i * 100;
+      index++;
+    }
+  mas_y_cells = [];
+  index = 0;
+  for (var i = from_y_div; i <= to_y_div; i++)
+    {
+      mas_y_cells[index] = i * 100;
+      console.log(i*100);
+      index++;
+    }
+    return [mas_x_cells, mas_y_cells]
+}
+
+function find_sprites(fieldArray)
+{
+  cells_chosen = find_coords();
+  for (var i = 0; i < cells_chosen[0].length; i++)
+  {
+    for (var j = 0; j < cells_chosen[1].length; j++)
+    {
+      for (var k = 0; k < fieldArray.length; k++)
+      {
+        for (var l = 0; l < fieldArray.length; l++)
+        {
+          x = cells_chosen[0][i]
+          y = cells_chosen[1][j]
+          var cell = fieldArray[k][l].tileSprite;
+          var fig_coords = cell.getTopLeft(fig_coords);
+          x_fig = fig_coords['x'];
+          y_fig = fig_coords['y'];
+          if ((x == x_fig) & (y == y_fig))
+            {
+              console.log("I've found!", x, y);
+              cell.blendMode = 2;
+            }
+        }
+      }
+    }
+  }
 }
 
 class mainScene extends Phaser.Scene{
@@ -96,27 +154,31 @@ class mainScene extends Phaser.Scene{
 
       this.fieldArray = [];
       this.fieldGroup = this.add.group();
-      for (var i = 0; i < 4; i++)
+      for (var i = 0; i < 5; i++)
       {
         this.fieldArray[i] = [];
-        for (var j = 0; j < 4; j++)
+        for (var j = 0; j < 5; j++)
         {
-          var cell = this.add.sprite(150 + i*120, 150 + j*120, "tile");
+          var cell = this.add.sprite(50 + i*100, 50 +  j*100, "tile");
+          cell.data = [i,j]
           this.fieldGroup.add(cell);
           this.fieldArray[i][j] = {
             tileValue: 1,
             tileSprite: cell,
-            canUpgrade: true
+            canUpgrade: true,
+            bright: 0
         }
         this.fieldArray[i][j].tileSprite.setInteractive();
-        this.fieldArray[i][j].tileSprite.on('clicked', function (tileSprite) { tileSprite.input.enabled = false; console.log(tileSprite); tileSprite.setVisible(false); }, this);
+      //  this.fieldArray[i][j].tileSprite.on('clicked', function (tileSprite) { tileSprite.input.enabled = false; console.log(tileSprite); tileSprite.setVisible(false); }, this);
       }
     }
     this.input.on('gameobjectup', function (pointer, gameObject)
     {
       gameObject.emit('clicked', gameObject);
     }, this);
-    console.log(this.fieldArray[0][0]);
+    this.input.on('pointerdown', function (pointer, gameObject) { pointerdown = true; from_x = pointer.x; from_y = pointer.y; }, this);
+    this.input.on('pointerup', function (pointer, gameObject) { pointerdown = false; to_x = pointer.x; to_y = pointer.y; console.log(" from", from_x," ", from_y, " to ", to_x, " ", to_y); find_sprites(this.fieldArray);}, this);
+    console.log(this.fieldArray);
   }
 
     update()
@@ -126,8 +188,8 @@ class mainScene extends Phaser.Scene{
 
 var config = {
               type: Phaser.AUTO,
-              width: 800,
-              height: 600,
+              width: 1000,
+              height: 1000,
               backgroundColor: "#4488AA",
               scene: [mainScene]
 };
