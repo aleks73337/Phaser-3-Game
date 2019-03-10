@@ -82,25 +82,50 @@ function find_coords()
   to_x_div = div(to_x, 100)
   to_y_div = div(to_y, 100)
   mas_x_cells = [];
-  var index = 0;
-  for (var i = from_x_div; i <= to_x_div; i++)
-    {
-      mas_x_cells[index] = i * 100;
-      index++;
+  if (to_x_div >= from_x_div)
+  {
+    var index = 0;
+    for (var i = from_x_div; i <= to_x_div; i++)
+      {
+        mas_x_cells[index] = i * 100;
+        index++;
+      }
+  }
+  else {
+      var index = 0;
+      for (var i = to_x_div; i <= from_x_div; i++)
+        {
+          mas_x_cells[index] = i * 100;
+          index++;
     }
+  }
   mas_y_cells = [];
   index = 0;
-  for (var i = from_y_div; i <= to_y_div; i++)
-    {
-      mas_y_cells[index] = i * 100;
-      console.log(i*100);
-      index++;
-    }
+  if (to_y_div >= from_y_div)
+  {
+    for (var i = from_y_div; i <= to_y_div; i++)
+      {
+        mas_y_cells[index] = i * 100;
+        console.log(i*100);
+        index++;
+      }
+  }
+  else
+  {
+    for (var i = to_y_div; i <= from_y_div; i++)
+      {
+        mas_y_cells[index] = i * 100;
+        console.log(i*100);
+        index++;
+      }
+  }
     return [mas_x_cells, mas_y_cells]
 }
 
 function find_sprites(fieldArray)
 {
+  var chosen_cells = [];
+  var counter = 0;
   cells_chosen = find_coords();
   for (var i = 0; i < cells_chosen[0].length; i++)
   {
@@ -113,17 +138,29 @@ function find_sprites(fieldArray)
           x = cells_chosen[0][i]
           y = cells_chosen[1][j]
           var cell = fieldArray[k][l].tileSprite;
+          var cell_val = fieldArray[k][l].tileValue;
           var fig_coords = cell.getTopLeft(fig_coords);
           x_fig = fig_coords['x'];
           y_fig = fig_coords['y'];
-          if ((x == x_fig) & (y == y_fig))
+          if ((x == x_fig) & (y == y_fig) & (cell_val == -1))
             {
-              console.log("I've found!", x, y);
-              cell.blendMode = 2;
+              chosen_cells[counter] = fieldArray[k][l];
+              counter++;
+              console.log("Cell found");
             }
+          if ((x == x_fig) & (y == y_fig) & (cell_val == 1))
+          {
+            console.log("Cell has already chosen");
+            return;
+          }
         }
       }
     }
+  }
+  for (var i = 0; i < chosen_cells.length; i++)
+  {
+    chosen_cells[i].tileSprite.blendMode = 2;
+    chosen_cells[i].tileValue = 1;
   }
 }
 
@@ -142,11 +179,6 @@ class mainScene extends Phaser.Scene{
 
     create()
     {
-      //var map = this.make.tilemap({ key: 'map' });
-      //var tiles = map.addTilesetImage('tile');
-      //var layer = map.createStaticLayer('gameField', tiles, 0, 0);
-      //layer.setScrollFactor(0.5);
-      //layer.setAlpha(0.75);
       timer(this);
       setTimeout(function() { console.log(window.timeScore); }, 5000);
 
@@ -163,7 +195,7 @@ class mainScene extends Phaser.Scene{
           cell.data = [i,j]
           this.fieldGroup.add(cell);
           this.fieldArray[i][j] = {
-            tileValue: 1,
+            tileValue: -1,
             tileSprite: cell,
             canUpgrade: true,
             bright: 0
