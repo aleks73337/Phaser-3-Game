@@ -6,7 +6,7 @@
 }
 .modalbackground {
   border: 1px solid white;
-  
+
 margin: 200px 0 300px 400px; /* убираем отступы */
 padding: 40px 20px 40px 20px; /* убираем отступы */
 position: fixed; /* фиксируем положение */
@@ -25,7 +25,7 @@ background-color: black;
 p{
    font-family: "pt sans", "Courier", monospace;
    font-size: 20pt;
- 
+
   margin: 400px 120px 10px 120px;
   line-height: 1.3em;
   column-count: 2;
@@ -61,7 +61,7 @@ ul.menu {
 
 ul.menu li {
   float: left;
- 
+
   list-style: none;
   margin: 10px 20px 0 20px;
   font-size: 30pt;
@@ -75,12 +75,12 @@ ul.menu li a {
   color: #fff;
   text-decoration: none;
 
-  
+
 }
 
 ul.menu li.selected a {
- border: 1px solid black; 
-   background: #FFD700; 
+ border: 1px solid black;
+   background: #FFD700;
     padding: 0px 30px 30px 30px;
     margin: 30px 0 10px 0 ;
 
@@ -104,7 +104,7 @@ ul.menu li a:hover {
 .logo h1 {
   font-size: 150px;
   margin: 0 0 0 0;
-  text-align: center;   
+  text-align: center;
    letter-spacing: -10px;
 }
 
@@ -117,7 +117,7 @@ ul.menu li a:hover {
 .reting h1 {
   font-size: 100px;
   margin: 0 0 0 0;
-  text-align: center;   
+  text-align: center;
 }
 
 
@@ -139,12 +139,12 @@ ul.reting_menu li a {
 color: #f6d51f;
   text-decoration: none;
 
-  
+
 }
 
 ul.reting_menu li.selected2 a {
- border: 1px solid black; 
-   background: #fa5457; 
+ border: 1px solid black;
+   background: #fa5457;
     padding: 5px 10px 40px 10px;
     margin: 20px 0 10px 0 ;
 
@@ -196,15 +196,15 @@ padding-bottom:40px;
 
 
 }
- 
+
 
 ul.game_menu li {
   float: center;
   padding: 0px 0 0px 0;
   margin: -20px 0px 0px 80px;
-  list-style: none; 
+  list-style: none;
   font-size: 28pt;
- 
+
 }
 ul.game_menu li a {
   display: block;
@@ -216,7 +216,7 @@ ul.game_menu li a {
   text-decoration: none;
 }
 ul.game_menu li.selected1 a {
-   background: #fa5457; 
+   background: #fa5457;
     padding: 0px 10px 0px 10px;
     margin: 20px 10px 0px 30px;
     display: block;
@@ -226,13 +226,14 @@ ul.game_menu li a:hover {
   color: #800080;
 }
 
+.game_left {
+z-index: 3;
+}
 
+.game_right {
+z-index:2;
+}
 
-
-
-   
-              
-
-
-
-
+.game_field {
+z-index: 1;
+}

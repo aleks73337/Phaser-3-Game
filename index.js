@@ -1,4 +1,43 @@
 var timeScore = 0;
+var field_size = 5;
+var level = [[3,-1,-1, 4,-1],
+             [-1,-1,-1,-1,4],
+             [-1,-1,-1,4,-1],
+             [-1,-1, 4,-1,4],
+             [2,-1,-1,-1,-1]];
+
+var empty_cells = field_size*field_size;
+var pointerdown = false;
+var from_x, from_y, to_x, to_y;
+
+
+function save_score(score)
+{
+  var gameService  = new App42Game();
+  var scoreBoardService  = new App42ScoreBoard();
+  App42.initialize("583bafed380bd828863b5ad474e4871081f34c9c0e8f6ab5d5c8e8fb91aab2bb","0d7e936e444e06ab988d45bc495dcbe891227120ccef0a5302c717ce37c921f5");
+
+  var gameName = "Shikaka";
+  userName = "Guest";
+  gameScore = score;
+  result ;
+  scoreBoardService.saveUserScore(gameName,userName,gameScore,{
+      success: function(object)
+      {
+          var game = JSON.parse(object);
+          result = game.app42.response.games.game;
+          console.log("gameName is : " + result.name)
+          var scoreList = result.scores.score;
+          console.log("userName is : " + scoreList.userName)
+          console.log("scoreId is : " + scoreList.scoreId)
+          console.log("value is : " + scoreList.value)
+      },
+      error: function(error) {
+      }
+  });
+}
+
+
 function timer(scene)
 {
   //объявляем переменные
@@ -43,8 +82,9 @@ function timer(scene)
      if (dm>0) { if (dm<10) { dm = '0'+dm; }} else { dm = '00'; }
      dh=h-1;
      if (dh>0) { if (dh<10) { dh = '0'+dh; }} else { dh = '00'; }
-     readout = dh + ':' + dm + ':' + ds + '.' + ms;
+     readout = dm + ':' + ds;
      window.timeScore = readout;
+     document.getElementsByTagName("h5")[0].innerHTML = readout;
      scoreText = scene.add.text(30, 30, readout, { font: "1px Arial", fill: "#ff0044", align: "center" });
      clocktimer = setTimeout(function(obj, text) { scoreText.destroy(); StartTIME(scene); }, 1000);
     }
@@ -60,16 +100,6 @@ function timer(scene)
      init=0;
   }
 }
-
-var level = [[3,0,0,4,0],
-             [0,0,0,0,4],
-             [0,0,0,4,0],
-             [0,0,4,0,4],
-             [2,0,0,0,0]];
-
-var empty_cells = 25;
-var pointerdown = false;
-var from_x, from_y, to_x, to_y;
 
 function div(val, by){
     return (val - val % by) / by;
@@ -122,6 +152,23 @@ function find_coords()
     return [mas_x_cells, mas_y_cells]
 }
 
+function find_num_cells(chosen_cells)
+{
+  var counter = 0;
+  var ret_val = 0;
+  for (var i = 0; i < chosen_cells.length; i++)
+  {
+    if (chosen_cells[i].tileValue > 0)
+      {
+          counter++;
+          ret_val = chosen_cells[i].tileValue;
+          console.log(ret_val);
+      }
+  }
+  console.log(counter);
+  return ((counter == 1) ?  ret_val : 0);
+}
+
 function find_sprites(fieldArray)
 {
   var chosen_cells = [];
@@ -142,13 +189,13 @@ function find_sprites(fieldArray)
           var fig_coords = cell.getTopLeft(fig_coords);
           x_fig = fig_coords['x'];
           y_fig = fig_coords['y'];
-          if ((x == x_fig) & (y == y_fig) & (cell_val == -1))
+          if ((x == x_fig) & (y == y_fig) & (cell_val != 0))
             {
               chosen_cells[counter] = fieldArray[k][l];
               counter++;
               console.log("Cell found");
             }
-          if ((x == x_fig) & (y == y_fig) & (cell_val == 1))
+          if ((x == x_fig) & (y == y_fig) & (cell_val == 0))
           {
             console.log("Cell has already chosen");
             return;
@@ -157,10 +204,17 @@ function find_sprites(fieldArray)
       }
     }
   }
-  for (var i = 0; i < chosen_cells.length; i++)
+  num_cells = find_num_cells(chosen_cells);
+  if (num_cells == 0)
+    return;
+  if (chosen_cells.length == num_cells)
   {
-    chosen_cells[i].tileSprite.blendMode = 2;
-    chosen_cells[i].tileValue = 1;
+    for (var i = 0; i < chosen_cells.length; i++)
+    {
+      chosen_cells[i].tileSprite.blendMode = 2;
+      chosen_cells[i].tileValue = 0;
+    }
+    empty_cells = empty_cells - num_cells;
   }
 }
 
@@ -175,6 +229,8 @@ class mainScene extends Phaser.Scene{
         this.load.image('ball', 'img/index.jpg');
         this.load.image('play', 'img/play.png');
         this.load.image('tile', 'img/tile.jpg');
+        for (var i = 1; i < 10; i++)
+          this.load.image(i,"img/" + i + ".jpg")
     }
 
     create()
@@ -186,16 +242,16 @@ class mainScene extends Phaser.Scene{
 
       this.fieldArray = [];
       this.fieldGroup = this.add.group();
-      for (var i = 0; i < 5; i++)
+      for (var i = 0; i < field_size; i++)
       {
         this.fieldArray[i] = [];
-        for (var j = 0; j < 5; j++)
+        for (var j = 0; j < field_size; j++)
         {
-          var cell = this.add.sprite(50 + i*100, 50 +  j*100, "tile");
-          cell.data = [i,j]
+          var cell = this.add.sprite(50 + i*100, 50 +  j*100, (level[j][i] > 0) ? level[j][i] : 'tile');
+          cell.data = 0;
           this.fieldGroup.add(cell);
           this.fieldArray[i][j] = {
-            tileValue: -1,
+            tileValue: level[j][i],
             tileSprite: cell,
             canUpgrade: true,
             bright: 0
@@ -220,9 +276,10 @@ class mainScene extends Phaser.Scene{
 
 var config = {
               type: Phaser.AUTO,
-              width: 1000,
-              height: 1000,
+              width: 500,
+              height: 500,
               backgroundColor: "#4488AA",
-              scene: [mainScene]
+              scene: [mainScene],
+              parent: "phaser_game"
 };
 var game = new Phaser.Game(config);
