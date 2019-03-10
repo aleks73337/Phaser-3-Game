@@ -1,0 +1,238 @@
+  * {
+  margin: 0;
+  padding: 0;
+
+
+}
+.modalbackground {
+  border: 1px solid white;
+  
+margin: 200px 0 300px 400px; /* убираем отступы */
+padding: 40px 20px 40px 20px; /* убираем отступы */
+position: fixed; /* фиксируем положение */
+background: rgba(0,0,0,0.5); /* полупрозрачный цвет фона */
+z-index:100; /* выводим фон поверх всех слоев на странице браузера */
+font-size: 20pt;
+}
+
+body {
+  font-size: 1.2em;
+background-color: black;
+ color: white;
+
+}
+
+p{
+   font-family: "pt sans", "Courier", monospace;
+   font-size: 20pt;
+ 
+  margin: 400px 120px 10px 120px;
+  line-height: 1.3em;
+  column-count: 2;
+  column-gap :70px;
+  text-align: justify;
+  color:white;
+  letter-spacing: 1px;
+vertical-align: center;
+
+
+
+}
+
+
+ul {
+  margin: 10px 0 10px 17px;
+}
+
+ul li {
+  margin: 0 0 6px 0;
+  padding: 0 0 6px 2px;
+  line-height: 1.7em;
+}
+
+.menubar {
+  width: 900px;
+  height: 40px;
+}
+
+ul.menu {
+  float: top;
+}
+
+ul.menu li {
+  float: left;
+ 
+  list-style: none;
+  margin: 10px 20px 0 20px;
+  font-size: 30pt;
+}
+
+
+ul.menu li a {
+  display: block;
+  height: 30px;
+  padding: 30px 35px 5px 28px;
+  color: #fff;
+  text-decoration: none;
+
+  
+}
+
+ul.menu li.selected a {
+ border: 1px solid black; 
+   background: #FFD700; 
+    padding: 0px 30px 30px 30px;
+    margin: 30px 0 10px 0 ;
+
+}
+
+ul.menu li a:hover {
+  color: #800080;
+}
+
+.main, .logo, .menubar, .specification_content {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.logo {
+    padding: 150px 0 50px 0;
+
+}
+
+
+.logo h1 {
+  font-size: 150px;
+  margin: 0 0 0 0;
+  text-align: center;   
+   letter-spacing: -10px;
+}
+
+.reting {
+    padding: 80px 0 50px 0;
+
+}
+
+
+.reting h1 {
+  font-size: 100px;
+  margin: 0 0 0 0;
+  text-align: center;   
+}
+
+
+
+ul.reting_menu li {
+  float: left;
+  padding: 0 0 0 0;
+  list-style: none;
+  margin: 10px px 0 10px;
+  padding: 0px 0px 0px 180px;
+  font-size: 30pt;
+}
+
+
+ul.reting_menu li a {
+  display: block;
+  height: 30px;
+  padding: 30px 35px 5px 28px;
+color: #f6d51f;
+  text-decoration: none;
+
+  
+}
+
+ul.reting_menu li.selected2 a {
+ border: 1px solid black; 
+   background: #fa5457; 
+    padding: 5px 10px 40px 10px;
+    margin: 20px 0 10px 0 ;
+
+}
+
+ul.reting_menu li a:hover {
+  color: #800080;
+}
+
+ .game_field {
+   max-width: 100%;
+  position: relative;
+  border: 2px solid white;
+  margin: 90px 30px -80px 30px;
+  background-color:black;
+ }
+
+.game_right
+{
+margin: 0px 0px 0px 800px;
+position: auto;
+  border: 3px solid white;
+  position: static;
+ text-align: center;
+}
+
+
+.game_right h2 {
+     font-size: 40pt;
+     letter-spacing: -10px;
+     padding-top: 30px;
+
+}
+
+.game_right h4 {
+  font-size: 40pt;
+     letter-spacing: 2px;
+     background-color: #5ca057;
+    padding: 10px;
+     color: black;
+}
+
+.game_right h5 {
+  font-size: 40pt;
+  letter-spacing: 2px;
+  background-color: #5ca057;
+padding-bottom:40px;
+  color: black;
+
+
+}
+ 
+
+ul.game_menu li {
+  float: center;
+  padding: 0px 0 0px 0;
+  margin: -20px 0px 0px 80px;
+  list-style: none; 
+  font-size: 28pt;
+ 
+}
+ul.game_menu li a {
+  display: block;
+  height: 60px;
+  width: 130px;
+  padding: 30px 35px 0px 28px;
+  margin: 0 10px 0 10px;
+  color: #f6d51f;
+  text-decoration: none;
+}
+ul.game_menu li.selected1 a {
+   background: #fa5457; 
+    padding: 0px 10px 0px 10px;
+    margin: 20px 10px 0px 30px;
+    display: block;
+
+}
+ul.game_menu li a:hover {
+  color: #800080;
+}
+
+
+
+
+
+   
+              
+
+
+
+
